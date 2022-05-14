@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FreeNowTask</string>
+    <string name="vehicle_id">Vehicle Id: %1$d</string>
+    <string name="vehicle_type">Vehicle Type: %1$s</string>
+    <string name="title_activity_maps">MapsActivity</string>
+</resources>
