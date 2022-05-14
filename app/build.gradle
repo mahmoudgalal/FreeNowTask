@@ -15,6 +15,7 @@ android {
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -61,6 +62,8 @@ dependencies {
     // KTX for the Maps SDK for Android Utility Library
     implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    // Multidex
+    implementation "androidx.multidex:multidex:2.0.1"
 
     //Hilt DI
     implementation("com.google.dagger:hilt-android:2.38.1")
