@@ -68,13 +68,13 @@ class MapsActivity : AppCompatActivity() {
                 googleMap.cameraIdleEvents().collect {
                     Log.d(TAG, "Camera Idle...")
                     // load all vehicles in the camera bounds and add markers
-                    addVehiclesCluster(googleMap, markerManager)
+                    addVehiclesCluster(googleMap)
                 }
             }
         }
     }
 
-    private suspend fun addVehiclesCluster(map: GoogleMap, markerManager: MarkerManager) {
+    private suspend fun addVehiclesCluster(map: GoogleMap) {
         clusterManager.onCameraIdle()
         val region = map.projection.visibleRegion.latLngBounds.toRegion()
         vehiclesViewModel.loadAllVehiclesInRegion(region).join()
