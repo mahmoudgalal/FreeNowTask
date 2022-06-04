@@ -5,7 +5,8 @@
    Coroutines<br/>
    Android Arc comoponents.<br/>
    Retrofit.<br/>
- - A prebuilt APK is provided under /prebuilt directory in this repo.<br/><br/><br/><br/>
+   MVVM + Clean Architecture.<br/>
+
  ![](https://github.com/mahmoudgalal/FreeNowTask/blob/main/Screenshot_1.png)
 
 
