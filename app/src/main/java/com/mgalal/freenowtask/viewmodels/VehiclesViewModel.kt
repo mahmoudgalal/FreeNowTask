@@ -3,11 +3,10 @@ package com.mgalal.freenowtask.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mgalal.freenowtask.data.Result
-import com.mgalal.freenowtask.model.NetworkResponse
+import com.mgalal.freenowtask.domain.AbstractUseCase
+import com.mgalal.freenowtask.domain.DomainResult
 import com.mgalal.freenowtask.model.Region
 import com.mgalal.freenowtask.model.Vehicles
-import com.mgalal.freenowtask.repositories.IVehicleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
@@ -15,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class VehiclesViewModel @Inject constructor(private val vehicleRepository: IVehicleRepository) :
+class VehiclesViewModel @Inject constructor(private val vehiclesUseCase: @JvmSuppressWildcards AbstractUseCase<Region, Vehicles>) :
     ViewModel() {
 
     val allVehicles: MutableLiveData<Vehicles> = MutableLiveData(listOf())
@@ -28,17 +27,12 @@ class VehiclesViewModel @Inject constructor(private val vehicleRepository: IVehi
     fun loadAllVehiclesInRegion(region: Region): Job {
         return viewModelScope.launch(handler) {
             val vehicles = with(region) {
-                vehicleRepository.getAllVehicles(
-                    latitude1,
-                    longitude1,
-                    latitude2,
-                    longitude2
-                )
+                vehiclesUseCase(this)
             }
             when (vehicles) {
-                is Result.Success<NetworkResponse> ->
-                    allVehicles.value = vehicles.data.poiList
-                is Result.Error ->
+                is DomainResult.Success ->
+                    allVehicles.value = vehicles.data
+                is DomainResult.Error ->
                     error.value = vehicles.exception.message
             }
         }

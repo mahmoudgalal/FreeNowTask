@@ -2,6 +2,10 @@ package com.mgalal.freenowtask.di
 
 import com.google.gson.Gson
 import com.mgalal.freenowtask.data.VehicleService
+import com.mgalal.freenowtask.domain.AbstractUseCase
+import com.mgalal.freenowtask.domain.LoadVehiclesUseCase
+import com.mgalal.freenowtask.model.Region
+import com.mgalal.freenowtask.model.Vehicles
 import com.mgalal.freenowtask.repositories.IVehicleRepository
 import com.mgalal.freenowtask.repositories.VehicleRepositoryImpl
 import dagger.Module
@@ -27,9 +31,15 @@ object Modules {
         return builder.create(VehicleService::class.java)
     }
 
+    @IoDispatcher
+    @Provides
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
     @Provides
     @Singleton
-    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+    fun provideLoadVehiclesUseCase( @IoDispatcher coroutineDispatcher: CoroutineDispatcher,
+                                   vehicleRepository: IVehicleRepository): AbstractUseCase< Region, Vehicles> =
+        LoadVehiclesUseCase(coroutineDispatcher,vehicleRepository)
 }
 
 @Module
@@ -39,7 +49,7 @@ object RepositoryModule {
     @Singleton
     fun provideVehicleRepository(
         service: VehicleService,
-        ioDispatcher: CoroutineDispatcher
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): IVehicleRepository {
         return VehicleRepositoryImpl(service, ioDispatcher)
     }
