@@ -2,6 +2,7 @@ package com.mgalal.freenowtask
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.mgalal.freenowtask.data.VehicleService
+import com.mgalal.freenowtask.domain.LoadVehiclesUseCase
 import com.mgalal.freenowtask.model.NetworkResponse
 import com.mgalal.freenowtask.model.Vehicle
 import com.mgalal.freenowtask.repositories.IVehicleRepository
@@ -36,6 +37,7 @@ class VehiclesViewModelTest {
     private lateinit var vehiclesViewModel: VehiclesViewModel
     val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
     private lateinit var vehicleRepository: IVehicleRepository
+    private lateinit var loadVehiclesUseCase: LoadVehiclesUseCase
     private lateinit var vehicleService: VehicleService
 
 
@@ -56,7 +58,8 @@ class VehiclesViewModelTest {
 
             }
             vehicleRepository = VehicleRepositoryImpl(vehicleService, testDispatcher)
-            vehiclesViewModel = VehiclesViewModel(vehicleRepository)
+            loadVehiclesUseCase = LoadVehiclesUseCase(testDispatcher, vehicleRepository)
+            vehiclesViewModel = VehiclesViewModel(loadVehiclesUseCase)
 
             vehiclesViewModel.loadAllVehiclesInRegion(hamburgRegion)
             vehiclesViewModel.allVehicles.observeForTesting {
@@ -90,7 +93,8 @@ class VehiclesViewModelTest {
                 }
             }
             vehicleRepository = VehicleRepositoryImpl(vehicleService, testDispatcher)
-            vehiclesViewModel = VehiclesViewModel(vehicleRepository)
+            loadVehiclesUseCase = LoadVehiclesUseCase(testDispatcher, vehicleRepository)
+            vehiclesViewModel = VehiclesViewModel(loadVehiclesUseCase)
 
             // do
             vehiclesViewModel.loadAllVehiclesInRegion(hamburgRegion)
